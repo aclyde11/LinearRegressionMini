@@ -1,34 +1,49 @@
 #include <iostream>
 
 #include <Eigen/Dense>
+#include <fstream>
+#include <vector>
 #include "Classifier.h"
 #include <LinearRegression.h>
 
-int main() {
-    Eigen::MatrixXd m(5,2);
-    m(0,0) = 1;
-    m(1,0) = 1;
-    m(2,0) = 1;
-    m(3,0) = 1;
-    m(4,0) = 1;
-    m(0,1) = 12.4;
-    m(1,1) = 14.3;
-    m(2,1) = 14.5;
-    m(3,1) = 14.9;
-    m(4,1) = 16.1;
+using namespace Eigen;
 
-    Eigen::VectorXd v(5);
-    v(0) = 11.2;
-    v(1) = 12.5;
-    v(2) = 12.7;
-    v(3) = 13.1;
-    v(4) = 14.1;
+template<typename M>
+M load_csv (const std::string & path) {
+    std::ifstream indata;
+    indata.open(path);
+    std::string line;
+    std::vector<double> values;
+    uint rows = 0;
+    while (std::getline(indata, line)) {
+        std::stringstream lineStream(line);
+        std::string cell;
+        while (std::getline(lineStream, cell, ',')) {
+            values.push_back(std::stod(cell));
+        }
+        ++rows;
+    }
+    return Map<const Matrix<typename M::Scalar, M::RowsAtCompileTime, M::ColsAtCompileTime, RowMajor>>(values.data(), rows, values.size()/rows);
+}
 
-    LinearRegression clf(0.001, 100, 0.01);
-    clf.fit(m,v);
+int check_correct_thetas(MatrixXd A, MatrixXd B, double epsilon) {
+    return (B-A).squaredNorm() < epsilon;
+}
 
-    Eigen::IOFormat fmt(4, 0, ", ", "\n", "", "");
-    std::cout << clf.getThetas().format(fmt);
+int main(int argc, const char* argv[]) {
+    Eigen::IOFormat fmt(4, 0, ", ", "\n", "[", "]", "{", "}\n");
+
+    MatrixXd X = load_csv<MatrixXd>(argv[1]);
+    MatrixXd y = load_csv<MatrixXd>(argv[2]);
+    MatrixXd theta_correct = load_csv<MatrixXd>(argv[3]);
+
+
+    LinearRegression clf(atof(argv[4]), atof(argv[5]), 0.0001);
+    clf.fit(X,y);
+
+    std::cout << check_correct_thetas(clf.getThetas(), theta_correct, 0.001);
 
     return 0;
 }
+
+

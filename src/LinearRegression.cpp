@@ -45,11 +45,11 @@ void LinearRegression::gradientDescent(Eigen::MatrixXd X, Eigen::VectorXd y) {
     for (int k = 0; k < MAX_ITER && (theta_prev - theta_prev).squaredNorm() < EPSILON; k++) {
         theta_prev = theta;
         delta = 1/((double) dim[0]) * (X.cwiseProduct((X*theta-y).replicate(1,dim[1]))).colwise().sum();
-        std::cout << "delta:\n";
-        std::cout << delta.format(fmt);
+        //std::cout << "delta:\n";
+        //std::cout << delta.format(fmt);
         theta = (theta - (alpha * delta));
-        std::cout << "Iteration " << k << " , Cost:" << computeCost(X,y) << std::endl;
-        std::cout << theta.format(fmt) << std::endl;
+        //std::cout << "Iteration " << k << " , Cost:" << computeCost(X,y) << std::endl;
+        //std::cout << theta.format(fmt) << std::endl;
     }
 }
 
