@@ -5,8 +5,8 @@ from subprocess import Popen, PIPE
 
 from sklearn.datasets import make_regression
 
-test_list = [(10, 2), (1000,2), (5000,2),
-              (10000,2), (5000,10), (1000,100)]
+test_list = [(10, 2), (1000, 2), (1000, 2),
+             (10000,2), (5000,10), (1000,100)]
 
 for (samples,features) in test_list:
     print((samples,features))
@@ -15,9 +15,9 @@ for (samples,features) in test_list:
     np.savetxt("y.csv", fmt='%f', delimiter=',', X= y.T)
     np.savetxt("theta.csv", fmt='%f', delimiter=',', X= coefs.T)
 
-    cmd = ["./LinearRegressionProject", "X.csv", "y.csv", "theta.csv", "0.01", "50000"]
-    
+    print("Testing...")
+    cmd = ["./cmake-build-debug/LinearRegressionProject", "X.csv", "y.csv", "theta.csv", "0.01", "10000"]
     result = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     out = result.stdout.read()
-    print("Testing ")
+
     print(out.decode("utf-8") )

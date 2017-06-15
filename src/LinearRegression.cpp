@@ -32,7 +32,8 @@ Eigen::VectorXd LinearRegression::predict(Eigen::MatrixXd X) {
 }
 
 double LinearRegression::score(Eigen::MatrixXd X, Eigen::VectorXd y) {
-    return 0;
+  Eigen::VectorXd preds = predict(X);
+  return (preds - y).squaredNorm();
 }
 
 void LinearRegression::gradientDescent(Eigen::MatrixXd X, Eigen::VectorXd y) {
