@@ -16,7 +16,7 @@ for (samples,features) in test_list:
     np.savetxt("theta.csv", fmt='%f', delimiter=',', X= coefs.T)
 
     print("Testing...")
-    cmd = ["./cmake-build-debug/LinearRegressionProject", "X.csv", "y.csv", "theta.csv", "0.01", "10000"]
+    cmd = ["./cmake-build-default/LinearRegressionProject", "X.csv", "y.csv", "theta.csv", "0.01", "10000"]
     result = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     out = result.stdout.read()
 
